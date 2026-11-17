@@ -25,6 +25,7 @@ import CategoryCard from '../components/CategoryCard';
 import SpeakerCard from '../components/SpeakerCard';
 import CountdownTimer from '../components/CountdownTimer';
 import AnimatedHeading from '../components/AnimatedHeading';
+import CountUp from '../components/CountUp';
 import { useApp } from '../context/AppContext';
 
 const Home = () => {
@@ -32,6 +33,27 @@ const Home = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterError, setNewsletterError] = useState('');
   const [upcomingCategory, setUpcomingCategory] = useState('All');
+
+  // Staggered Arrange animation for About section (Images & Live Counter)
+  const aboutSectionRef = useRef(null);
+  const [aboutVisible, setAboutVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setAboutVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (aboutSectionRef.current) {
+      observer.observe(aboutSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   // Staggered Arrange animation for Upcoming Events cards
   const upcomingSectionRef = useRef(null);
@@ -279,24 +301,24 @@ const Home = () => {
       </section>
 
       {/* 4. ABOUT STACKLY EVENTS SECTION */}
-      <section id="about" className="section-about py-24 bg-white">
+      <section id="about" ref={aboutSectionRef} className="section-about py-24 bg-white">
         <div className="container">
           <div className="about-split-grid">
             {/* Visual media cluster */}
             <div className="about-media-cluster">
-              <div className="about-img-primary-wrap">
+              <div className={`about-img-primary-wrap ${aboutVisible ? 'is-arranged' : ''}`}>
                 <img 
                   src="/assets/general/about_conference.webp" 
                   alt="Stackly Conference Stage" 
                   className="about-img-primary"
                   loading="lazy"
                 />
-                <div className="about-media-accent-box">
-                  <span className="accent-box-num">12+</span>
+                <div className={`about-media-accent-box ${aboutVisible ? 'is-arranged' : ''}`}>
+                  <CountUp value="12+" isStarted={aboutVisible} className="accent-box-num" />
                   <span className="accent-box-label">Years Curating World-Class Summits</span>
                 </div>
               </div>
-              <div className="about-img-secondary-wrap">
+              <div className={`about-img-secondary-wrap ${aboutVisible ? 'is-arranged' : ''}`}>
                 <img 
                   src="/assets/general/about_workshop.webp" 
                   alt="Interactive Workshop" 
@@ -342,7 +364,9 @@ const Home = () => {
               <div className="about-stats-grid">
                 {STATS.map((stat, i) => (
                   <div key={i} className="about-stat-item">
-                    <span className="stat-number">{stat.value}</span>
+                    <span className="stat-number">
+                      <CountUp value={stat.value} isStarted={aboutVisible} />
+                    </span>
                     <span className="stat-label">{stat.label}</span>
                   </div>
                 ))}
