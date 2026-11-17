@@ -1,0 +1,4 @@
+[build]
+  # Install dependencies if they're missing (e.g. fresh checkouts without an install step), then build.
+  command = "if [ ! -x node_modules/.bin/vite ]; then npm ci --include=dev --no-audit --no-fund; fi && npm run build"
+  publish = "dist"
