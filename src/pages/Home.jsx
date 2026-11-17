@@ -34,6 +34,27 @@ const Home = () => {
   const [newsletterError, setNewsletterError] = useState('');
   const [upcomingCategory, setUpcomingCategory] = useState('All');
 
+  // Shuffle and Arrange animation for Categories section
+  const categoriesSectionRef = useRef(null);
+  const [categoriesVisible, setCategoriesVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setCategoriesVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (categoriesSectionRef.current) {
+      observer.observe(categoriesSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   // Staggered Arrange animation for About section (Images & Live Counter)
   const aboutSectionRef = useRef(null);
   const [aboutVisible, setAboutVisible] = useState(false);
@@ -251,7 +272,7 @@ const Home = () => {
       </div>
 
       {/* 2. POPULAR CATEGORIES SECTION */}
-      <section className="section-categories py-20 bg-white">
+      <section id="categories" ref={categoriesSectionRef} className="section-categories py-20 bg-white">
         <div className="container">
           <div className="section-header-centered">
             <div className="section-tag-pill">
@@ -262,11 +283,31 @@ const Home = () => {
             <p className="section-subtitle">
               Browse world-class gatherings across specialized discipline tracks tailored for engineers, executives, designers, and academics.
             </p>
+
+            <div className="mt-3 flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setCategoriesVisible(false);
+                  setTimeout(() => setCategoriesVisible(true), 60);
+                }}
+                className="why-replay-btn"
+                title="Replay card shuffle & arrange animation"
+              >
+                <Sparkles size={13} className="text-pink" />
+                <span>Shuffle & Arrange</span>
+              </button>
+            </div>
           </div>
 
           <div className="categories-grid">
-            {CATEGORIES.map(category => (
-              <CategoryCard key={category.id} category={category} />
+            {CATEGORIES.map((category, idx) => (
+              <CategoryCard 
+                key={category.id} 
+                category={category} 
+                index={idx}
+                isArranged={categoriesVisible}
+              />
             ))}
           </div>
         </div>
@@ -531,8 +572,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 8. WORLD-CLASS SPEAKERS SHOWCASE */}
-      <section className="section-speakers py-20 bg-white">
+      {/* 8. WORLD-CLASS SPEAKERS SHOWCASE - CONTINUOUS LIVE HORIZONTAL RUNNING MARQUEE */}
+      <section className="section-speakers py-24 bg-white">
         <div className="container">
           <div className="section-header-centered">
             <div className="section-tag-pill">
@@ -544,12 +585,25 @@ const Home = () => {
               Learn directly from Chief Scientists, Design Directors, and Managing Partners defining the modern industry.
             </p>
           </div>
+        </div>
 
-          <div className="speakers-grid">
-            {SPEAKERS.slice(0, 4).map(speaker => (
-              <SpeakerCard key={speaker.id} speaker={speaker} />
+        {/* Continuous Horizontal Live Running Track */}
+        <div className="speakers-marquee-wrapper">
+          <div className="speakers-marquee-track">
+            {[...SPEAKERS, ...SPEAKERS, ...SPEAKERS].map((speaker, index) => (
+              <div key={`${speaker.id}-${index}`} className="speaker-marquee-item">
+                <SpeakerCard speaker={speaker} />
+              </div>
             ))}
           </div>
+        </div>
+
+        {/* Live Indicator */}
+        <div className="text-center mt-8">
+          <span className="marquee-pause-hint">
+            <span className="live-dot" />
+            <span>Live continuous stream • Hover over any speaker to pause</span>
+          </span>
         </div>
       </section>
 

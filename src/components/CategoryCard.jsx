@@ -9,13 +9,16 @@ const iconMap = {
   GraduationCap
 };
 
-const CategoryCard = ({ category }) => {
+const CategoryCard = ({ category, index = 0, isArranged = true }) => {
   const IconComponent = iconMap[category.iconName] || Cpu;
 
   return (
     <Link 
       to={`/explore?category=${category.name}`} 
-      className="category-card group"
+      className={`category-card group category-card-shuffle ${isArranged ? 'is-arranged' : ''} shuffle-pos-${index % 4}`}
+      style={{
+        transitionDelay: isArranged ? `${index * 150}ms` : '0ms'
+      }}
     >
       <div className="category-bg-thumb">
         <img 

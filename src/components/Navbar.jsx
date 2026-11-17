@@ -64,7 +64,7 @@ const Navbar = () => {
             {/* Logo Section */}
             <Link to="/" className="brand-logo-link" aria-label="Stackly Home">
               <img 
-                src="/assets/stackly_087.webp?v=2" 
+                src="/assets/stackly_087.webp?v=3" 
                 alt="Stackly Events" 
                 className="brand-logo-img" 
               />

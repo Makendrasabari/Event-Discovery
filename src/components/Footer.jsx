@@ -25,7 +25,7 @@ const Footer = () => {
           <div className="footer-brand-col">
             <Link to="/" className="brand-logo-link" aria-label="Stackly Home">
               <img 
-                src="/assets/stackly_087.webp?v=2" 
+                src="/assets/stackly_087.webp?v=3" 
                 alt="Stackly Events" 
                 className="brand-logo-img" 
               />
@@ -149,13 +149,17 @@ const Footer = () => {
             © {new Date().getFullYear()} Stackly Events Network. Designed with GenesisExpo inspiration. All rights reserved.
           </div>
           <div className="footer-legal-links">
-            <a href="#privacy" className="legal-link">Privacy Policy</a>
-            <span className="dot-sep">•</span>
-            <a href="#terms" className="legal-link">Terms of Service</a>
-            <span className="dot-sep">•</span>
-            <a href="#cookies" className="legal-link">Cookie Settings</a>
-            <span className="dot-sep">•</span>
-            <a href="#security" className="legal-link">Security Compliance</a>
+            <div className="legal-links-group">
+              <a href="#privacy" className="legal-link">Privacy Policy</a>
+              <span className="dot-sep">•</span>
+              <a href="#terms" className="legal-link">Terms of Service</a>
+            </div>
+            <span className="dot-sep desktop-sep">•</span>
+            <div className="legal-links-group">
+              <a href="#cookies" className="legal-link">Cookie Settings</a>
+              <span className="dot-sep">•</span>
+              <a href="#security" className="legal-link">Security Compliance</a>
+            </div>
           </div>
         </div>
       </div>
